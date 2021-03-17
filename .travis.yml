@@ -1,0 +1,22 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t sanchitsharma28/multi-test -f client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true sanchitsharma28/multi-test npm run test
+
+after_success:
+  - docker build -t sanchitsharma28/multi-node-client ./client
+  - docker build -t sanchitsharma28/multi-node-server ./server
+  - docker build -t sanchitsharma28/multi-node-nginx ./nginx
+  - docker build -t sanchitsharma28/multi-node-worker ./worker
+  # Login to docker CLI to push the build to docker hub
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-std-in
+  # push the images to docker hub
+  - docker push multi-node-client
+  - docker push multi-node-server
+  - docker push multi-node-nginx
+  - docker push multi-node-worker
