@@ -14,7 +14,7 @@ after_success:
   - docker build -t sanchitsharma28/multi-node-nginx ./nginx
   - docker build -t sanchitsharma28/multi-node-worker ./worker
   # Login to docker CLI to push the build to docker hub
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-std-in
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   # push the images to docker hub
   - docker push multi-node-client
   - docker push multi-node-server
